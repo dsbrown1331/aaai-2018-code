@@ -5,21 +5,23 @@
 #include "../include/confidence_bounds.hpp"
 #include "../include/unit_norm_sampling.hpp"
 #include "../include/feature_birl.hpp"
+#include "../include/abbeel_projection.hpp"
 #include <fstream>
 #include <string>
 
-//Compare proposed probabilistic upper bound on policy evaluation with worst-case bound
-
-//Code to run experiment shown in Figure 2 in "Efficient Probabilistic Performance Bounds for Inverse Reinforcement Learning" from AAAI 2018.
+//Test using Abbeel projection algorithm as evaluation policy to compare our bound
+//with the theoretical bound proved by Syed and Schapire.
 
 using namespace std;
+
 
 int main() 
 {
 
     ////Experiment parameters
+    double epsilon = 0.001;  //for abbeel algorithm
     const unsigned int reps = 200;                    //repetitions per setting
-    const vector<unsigned int> numDemos = {1,3,5,7,9};            //number of demos to give
+    const vector<unsigned int> numDemos = {1,5,9};            //number of demos to give
     const vector<unsigned int> rolloutLengths = {100};          //max length of each demo
     const vector<double> alphas = {100}; //50                    //confidence param for BIRL
     const unsigned int chain_length = 10000;//1000;//5000;        //length of MCMC chain
@@ -46,9 +48,8 @@ int main()
     vector<unsigned int> initStates = {10, 13, 16, 37, 40, 43, 64, 67, 70};
     vector<unsigned int> termStates = {};
     
-    
     //create directory for results
-    string filePath = "./data/gridworld/";
+    string filePath = "./data/abbeel_projection/";
     string mkdirFilePath = "mkdir -p " + filePath;
     system(mkdirFilePath.c_str());
 
@@ -68,7 +69,7 @@ for(unsigned int rolloutLength : rolloutLengths)
             for(unsigned int rep = 0; rep < reps; rep++)
             {
                 //set up file for output
-                string filename = "GridWorldInfHorizon_numdemos" +  to_string(numDemo) 
+                string filename = "ProjectionEval_numdemos" +  to_string(numDemo) 
                                 + "_alpha" + to_string((int)alpha) 
                                 + "_chain" + to_string(chain_length) 
                                 + "_step" + to_string(step)
@@ -136,33 +137,18 @@ for(unsigned int rolloutLength : rolloutLengths)
 
 
 
-                ///  run BIRL to get chain and Map policyLoss ///
+                ///  run BIRL to get chain///
                 //give it a copy of mdp to initialize
                 FeatureBIRL birl(&fmdp, min_r, max_r, chain_length, step, alpha, sample_flag, mcmc_reject_flag, num_steps);
                 birl.addPositiveDemos(good_demos);
                 birl.displayDemos();
                 birl.run();
-                FeatureGridMDP* mapMDP = birl.getMAPmdp();
-                mapMDP->displayFeatureWeights();
-                //cout << "Recovered reward" << endl;
-                //mapMDP->displayRewards();
-
-                //solve for the optimal policy
-                vector<unsigned int> eval_pi (mapMDP->getNumStates());
-                mapMDP->valueIteration(eps);
-                mapMDP->calculateQValues();
-                mapMDP->getOptimalPolicy(eval_pi);
-//                cout << "-- value function ==" << endl;
-//                mapMDP->displayValues();
-//                mapMDP->deterministicPolicyIteration(map_policy);
-//                cout << "-- optimal policy --" << endl;
-                //mapMDP->displayPolicy(eval_pi);
-                //cout << "\nPosterior Probability: " << birl.getMAPposterior() << endl;
-                //double base_loss = policyLoss(eval_pi, &fmdp);
-                //cout << "Current policy loss: " << base_loss << "%" << endl;
-
-                /// We use the Map Policy as the evaluation policy
-
+                
+                /// run Abbeel projection to get evaluation policy ///
+                ProjectionIRL projectionIRL(&fmdp);
+                vector<unsigned int> eval_pi(fmdp.getNumStates());
+                projectionIRL.getProjectionPolicy(eval_pi, trajectories, epsilon);
+                
                 
                 
                 //write actual, worst-case, and chain info to file

@@ -9,18 +9,11 @@
 #include <fstream>
 #include <string>
 
-//Test using Abbeel projection algorithm as evaluation policy
+//Test using Abbeel projection algorithm as evaluation policy to compare our bound
+//with the theoretical bound proved by Syed and Schapire.
 
 using namespace std;
 
-//Added stochastic transitions
-////trying large scale experiment for feasible goal rewards
-///trying with any random weights and no terminal state
-///rewards that don't allow trajectories to the goal.
-///using random world and random reward each time
-
-
-//experiment10_1
 
 int main() 
 {
@@ -28,7 +21,7 @@ int main()
     ////Experiment parameters
     double epsilon = 0.001;  //for abbeel algorithm
     const unsigned int reps = 200;                    //repetitions per setting
-    const vector<unsigned int> numDemos = {9};            //number of demos to give
+    const vector<unsigned int> numDemos = {1,5,9};            //number of demos to give
     const vector<unsigned int> rolloutLengths = {100};          //max length of each demo
     const vector<double> alphas = {100}; //50                    //confidence param for BIRL
     const unsigned int chain_length = 10000;//1000;//5000;        //length of MCMC chain
@@ -54,6 +47,11 @@ int main()
 //    double** stateFeatures = random9x9GridNavGoalWorld8Features();
     vector<unsigned int> initStates = {10, 13, 16, 37, 40, 43, 64, 67, 70};
     vector<unsigned int> termStates = {};
+    
+    //create directory for results
+    string filePath = "./data/abbeel_projection/";
+    string mkdirFilePath = "mkdir -p " + filePath;
+    system(mkdirFilePath.c_str());
 
 for(unsigned int rolloutLength : rolloutLengths)
 {
@@ -71,7 +69,7 @@ for(unsigned int rolloutLength : rolloutLengths)
             for(unsigned int rep = 0; rep < reps; rep++)
             {
                 //set up file for output
-                string filename = "numdemos" +  to_string(numDemo) 
+                string filename = "ProjectionEval_numdemos" +  to_string(numDemo) 
                                 + "_alpha" + to_string((int)alpha) 
                                 + "_chain" + to_string(chain_length) 
                                 + "_step" + to_string(step)
@@ -80,7 +78,7 @@ for(unsigned int rolloutLength : rolloutLengths)
                                 + "_stochastic" + to_string(stochastic)
                                 + "_rep" + to_string(rep)+ ".txt";
                 cout << filename << endl; 
-                ofstream outfile("data/experiment10_1/" + filename);
+                ofstream outfile(filePath + filename);
             
                 srand(startSeed + 3*rep);
                 cout << "------Rep: " << rep << "------" << endl;
@@ -191,7 +189,7 @@ for(unsigned int rolloutLength : rolloutLengths)
                     //cout << "Eval Policy" << endl; 
                     double Vhat = evaluateExpectedReturn(eval_pi, sampleMDP, eps);
                     //cout << Vhat << endl;
-                    double VabsDiff = abs(Vstar - Vhat);
+                    double VabsDiff = Vstar - Vhat;
                     //cout << "abs diff: " << VabsDiff << endl;
                     outfile << VabsDiff << endl;
                 }    
@@ -211,92 +209,6 @@ for(unsigned int rolloutLength : rolloutLengths)
         }
     }
 }
-//    double featureWeights[] = {0,-1,+1,0,0};
-//    
-
-
-//    //set up terminals and inits
-
-//    vector<unsigned int> demoStates = initStates;
-//   
-//    FeatureGridMDP fmdp(size, size, initStates, termStates, numFeatures, featureWeights, stateFeatures, gamma);
-
-//    cout << "\nInitializing feature gridworld of size " << size << " by " << size << ".." << endl;
-//    cout << "    Num states: " << fmdp.getNumStates() << endl;
-//    cout << "    Num actions: " << fmdp.getNumActions() << endl;
-
-//    cout << " Features" << endl;
-
-//    displayStateColorFeatures(stateFeatures, 5, 5, numFeatures);
-
-//    cout << "\n-- True Rewards --" << endl;
-//    fmdp.displayRewards();
-
-//    //solve for the optimal policy
-//    vector<unsigned int> opt_policy (fmdp.getNumStates());
-//    fmdp.valueIteration(0.001);
-//    cout << "-- value function ==" << endl;
-//    fmdp.displayValues();
-//    fmdp.deterministicPolicyIteration(opt_policy);
-//    cout << "-- optimal policy --" << endl;
-//    fmdp.displayPolicy(opt_policy);
-//    fmdp.calculateQValues();
-//    //cout << " Q values" << endl;
-//    //fmdp.displayQValues();
-//    cout << "state expected feature counts of optimal policy" << endl;
-//    double eps = 0.001;
-//    double** stateFeatureCnts = calculateStateExpectedFeatureCounts(opt_policy, &fmdp, eps);
-//    for(unsigned int s = 0; s < numStates; s++)
-//    {
-//        double* fcount = stateFeatureCnts[s];
-//        cout << "State " << s << ": ";
-//        for(unsigned int f = 0; f < numFeatures; f++)
-//            cout << fcount[f] << "\t";
-//        cout << endl;
-//    }
-//    
-//    cout << "calculate expected feature counts over initial states" << endl;
-//    double* expFeatureCnts = calculateExpectedFeatureCounts(opt_policy, &fmdp, eps);
-//    for(unsigned int f = 0; f < numFeatures; f++)
-//        cout << expFeatureCnts[f] << "\t";
-//    cout << endl;
-
-
-//    //test out empirical estimate of features for demonstrations
-//    int trajLength = 25;
-//    vector<vector<pair<unsigned int,unsigned int> > > trajectories;
-//    for(unsigned int s0 : demoStates)
-//    {
-//       cout << "demo from " << s0 << endl;
-//       vector<pair<unsigned int, unsigned int>> traj = fmdp.monte_carlo_argmax_rollout(s0, trajLength);
-//       //for(pair<unsigned int, unsigned int> p : traj)
-//           //cout << "(" <<  p.first << "," << p.second << ")" << endl;
-//       trajectories.push_back(traj);
-//    }
-//    double* demoFcounts = calculateEmpiricalExpectedFeatureCounts(trajectories, &fmdp);
-//    cout << "Demo f counts" << endl;
-//    for(unsigned int f = 0; f < numFeatures; f++)
-//        cout << demoFcounts[f] << "\t";
-//    cout << endl;
-
-//    cout << "WFCB" << endl;
-//    double wfcb = calculateWorstCaseFeatureCountBound(opt_policy, &fmdp, trajectories, eps);
-//    cout << wfcb << endl;
-//    
-//    cout << "True diff" << endl;
-
-//    
-
-//    cout << "Freeing variables" << endl;
-//    for(unsigned int s1 = 0; s1 < numStates; s1++)
-//    {
-//        delete[] stateFeatures[s1];
-//        delete[] stateFeatureCnts[s1];
-//    }
-//    delete[] stateFeatures;
-//    delete[] stateFeatureCnts;
-//    delete[] demoFcounts;
-//    delete[] expFeatureCnts;
 
 
 }
