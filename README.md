@@ -1,5 +1,7 @@
 # Efficient Probabilistic Performance Bounds for Inverse Reinforcement Learning
-### Follow the instructions below to reproduce results in <a href="https://arxiv.org/abs/1707.00724">AAAI 2018 paper</a>.
+## Daniel S. Brown and Scott Niekum
+##University of Texas at Austin
+### Follow the instructions below to reproduce results in our <a href="https://arxiv.org/abs/1707.00724">AAAI 2018 paper</a>.
 .
   - UNDER CONSTRUCTION
   - Make a build directory: `mkdir build`
