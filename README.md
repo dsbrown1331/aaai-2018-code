@@ -28,7 +28,7 @@
   
   
   #### Comparison with theoretical bounds (Table 1 in in <a href="https://arxiv.org/abs/1707.00724">AAAI 2018 paper</a>)
-    - Use `make gridworld_projection_exp` to build the experiment.
+  - Use `make gridworld_projection_exp` to build the experiment.
   - Execute `./gridworld_projection_exp` to run. Data will be output to `./data/abbeel_projection/`
   - Experiment will take some time to run since it runs 200 replicates for each number of demonstrations. Experiment parameters can be set in `src/gridWorldProjectionEvalExperiment.cpp`. 
   -Once experiment has finished run `python scripts/generateProjectionEvalTable.py` to generate table used in paper.
