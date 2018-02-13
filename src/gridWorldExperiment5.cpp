@@ -34,7 +34,7 @@ int main()
     const unsigned int reps = 200;                    //repetitions per setting
     const vector<unsigned int> numDemos = {1,2,3,4,5,6,7,8,9};            //number of demos to give
     const vector<unsigned int> rolloutLengths = {100};          //max length of each demo
-    const vector<double> alphas = {100, 10, 1}; //50                    //confidence param for BIRL
+    const vector<double> alphas = {100}; //50                    //confidence param for BIRL
     const unsigned int chain_length = 10000;//1000;//5000;        //length of MCMC chain
     const int sample_flag = 4;                      //param for mcmc walk type
     const int num_steps = 10;                       //tweaks per step in mcmc
@@ -42,7 +42,7 @@ int main()
     const vector<double> steps = {0.01}; //0.01
     const double min_r = -1;
     const double max_r = 1;
-    bool removeDuplicates = false;
+    bool removeDuplicates = true;
 
     int startSeed = 132;
     double eps = 0.001;

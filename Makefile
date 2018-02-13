@@ -1,13 +1,20 @@
 OBJS = build/birl_test.o build/feature_test.o build/mdp_test.o
 CC = g++ -std=c++11
-DEBUG = -g -O3 -fopenmp
-CFLAGS = -Wall -c $(DEBUG)
+DEBUG = -g -O3 -fopenmp 
+CFLAGS = -Wall -c $(DEBUG) 
 LFLAGS = -Wall $(DEBUG)
 LP_SOLVE_INCL = -I /home/dsbrown/Libraries/lpsolve55/ -I /home/dsbrown/Libraries/eigen
 LP_SOLVE_LINK = /home/dsbrown/Libraries/lpsolve55/liblpsolve55.a -ldl
 
 
 all: birl_test feature_test mdp_test feature_birl_test conf_bound_test grid_experiment conf_bound_feature_test grid_l1_experiment fcount_example driving_example driving_birl_example experiment1 experiment2 experiment3 experiment4 experiment5 experiment7 experiment8 driving_experiment1 driving_birl_sandbox experiment9 experiment10 poison_test teaching1 enough1 enough2 enough_toy improvement_toy gen_feasible_r cakmak_test
+
+gridworld_basic_exp: build/gridWorldBasicExperiment.o
+	$(CC) $(LFLAGS) build/gridWorldBasicExperiment.o  -o gridworld_basic_exp
+	
+build/gridWorldBasicExperiment.o: src/gridWorldBasicExperiment.cpp include/mdp.hpp include/confidence_bounds.hpp include/feature_birl.hpp include/grid_domains.hpp include/unit_norm_sampling.hpp
+	$(CC) $(CFLAGS) src/gridWorldBasicExperiment.cpp -o build/gridWorldBasicExperiment.o
+
 
 feature: feature_test mdp_test feature_birl_test
 
