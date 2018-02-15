@@ -33,7 +33,7 @@
   - Use `make gridworld_projection_exp` to build the experiment.
   - Execute `./gridworld_projection_exp` to run. Data will be output to `./data/abbeel_projection/`
   - Experiment will take some time to run since it runs 200 replicates for each number of demonstrations. Experiment parameters can be set in `src/gridWorldProjectionEvalExperiment.cpp`. 
-  - Once experiment has finished run `python scripts/generateProjectionEvalTable.py` to generate table used in paper.
+  <!---  - Once experiment has finished run `python scripts/generateProjectionEvalTable.py` to generate table used in paper. -->
   
   
   #### Policy Selection for Driving Domain
