@@ -182,6 +182,10 @@ def chernoff_hoeffding_upper_bnd(sample_data, delta_conf, b):
     sample_mean = np.nanmean(sample_data)
     return sample_mean + b * np.sqrt(np.log(1/delta)/(2*n))
     
+def abbeel_bound(num_features, gamma, delta, num_demos):
+    eps = 2.0 * np.sqrt(num_features) / (1.0-gamma) * np.sqrt(-1.0 / (2.0 * num_demos) * np.log(delta / 2.0 * num_features) )
+    return eps
+    
 def percentile_confidence_upper_bnd(sample_data, percentile, delta_conf):
     """percentile should be a decimal, e.g. 75th percentile is 0.75, delta confidence is the true confidence, e.g. 0.95"""
     
@@ -200,7 +204,7 @@ def percentile_confidence_upper_bnd(sample_data, percentile, delta_conf):
     #print "upper bound"
     z_upper = stats.norm.ppf(1-alpha)
     #print z_upper
-    upper_order_idx = int(np.ceil(z_upper * bin_std + bin_mean + 0.5))
+    upper_order_idx = int(np.ceil(z_upper * bin_std + bin_mean - 0.5))
     #print upper_order_idx
     
     #double check math 
@@ -209,19 +213,24 @@ def percentile_confidence_upper_bnd(sample_data, percentile, delta_conf):
 
 #testing scripts for bounds
 def main():
-    sample_data = [NaN, 1, 2, 3, NaN,1,1,2,3,4,3,2,1,1,1,1,1]
+    #sample_data = [NaN, 1, 2, 3, NaN,1,1,2,3,4,3,2,1,1,1,1,1]
     #sample_data = np.array([1,2,3,2,1,2,1,2,1,1,1,1,1,100,100,1,1,2,4,5,6,7])
     #sample_data = np.array(np.random.rand(3000))
-    num_b = 10000
-    delta_conf = 0.95
-    print "sample mean", np.nanmean(sample_data)
-    print "boot interval", bootstrap_confidence(sample_data, delta_conf, num_b)
-    print "boot upper", bootstrap_empirical_confidence_upper(sample_data, delta_conf, num_b)
-    print "boot upper percent", bootstrap_percentile_confidence_upper(sample_data, delta_conf, num_b)
-    print "value at risk 95%", value_at_risk(sample_data, delta_conf) 
-    print "phil lower bound 95%", phil_lower_bnd(sample_data, delta_conf, 3)
-    print "phil upper bound 95%", phil_upper_bnd(sample_data, delta_conf, 3)
-    print "t-test", ttest_upper_bnd(sample_data, delta_conf)
+    #num_b = 10000
+    #delta_conf = 0.95
+#    print "sample mean", np.nanmean(sample_data)
+#    print "boot interval", bootstrap_confidence(sample_data, delta_conf, num_b)
+#    print "boot upper", bootstrap_empirical_confidence_upper(sample_data, delta_conf, num_b)
+#    print "boot upper percent", bootstrap_percentile_confidence_upper(sample_data, delta_conf, num_b)
+#    print "value at risk 95%", value_at_risk(sample_data, delta_conf) 
+#    print "phil lower bound 95%", phil_lower_bnd(sample_data, delta_conf, 3)
+#    print "phil upper bound 95%", phil_upper_bnd(sample_data, delta_conf, 3)
+#    print "t-test", ttest_upper_bnd(sample_data, delta_conf)
+    num_features = 8
+    gamma = 0.9
+    delta = 0.05
+    for num_demos in range(10,15100):
+        print("abbeel bound for", num_demos, "demos =", abbeel_bound(num_features, gamma, delta, num_demos))
 
 if __name__=="__main__":
     main()
