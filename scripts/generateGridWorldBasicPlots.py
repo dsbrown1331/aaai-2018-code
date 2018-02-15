@@ -16,14 +16,13 @@ rolloutLength = 100
 numDemos = [1,3,5,7,9]
 tol = 0.0001
 gamma = 0.95
-burn = 100 #TODO play with this
+burn = 100
 skip = 20
 delta_conf = 0.95
 stochastic = 1
 bounds = ["VaR 99","VaR 95", "VaR 90", "WFCB"]
 fmts = ['o-','s--','^-.', '*:','>-','d--']
-b = 2 * 1.0/(1.0 - gamma)  #upper bound on random variables for concentration inequalities
-c = 10 #truncation value for MPeBCollapsed (Phil's method)
+
 
 filePath = "data/gridworld/"
 
@@ -60,26 +59,12 @@ for bound_type in bounds:
             #compute confidence bound
             if bound_type == "VAR":
                 upper_bnd = bound_methods.value_at_risk(burned_samples, delta_conf)
-            elif bound_type == "MPeBC":
-                upper_bnd = bound_methods.phil_upper_bnd(burned_samples, delta_conf, c)
-            elif bound_type == "TT":
-                upper_bnd = bound_methods.ttest_upper_bnd(burned_samples, delta_conf)
-            elif bound_type == "BS":                   
-                upper_bnd = bound_methods.bootstrap_percentile_confidence_upper(burned_samples, delta_conf, num_bootstrap)
-            elif bound_type == "CH":
-                upper_bnd = bound_methods.chernoff_hoeffding_upper_bnd(burned_samples, delta_conf, b)
             elif bound_type == "VaR 99":
                 upper_bnd = bound_methods.percentile_confidence_upper_bnd(burned_samples, 0.99, delta_conf)
             elif bound_type == "VaR 95":
                 upper_bnd = bound_methods.percentile_confidence_upper_bnd(burned_samples, 0.95, delta_conf)
             elif bound_type == "VaR 90":
                 upper_bnd = bound_methods.percentile_confidence_upper_bnd(burned_samples, 0.9, delta_conf)
-            elif bound_type == "aveVal":
-                upper_bnd = np.mean(burned_samples)
-            elif bound_type == "AM":
-                upper_bnd = -1*bound_methods.anderson_lower_bnd(-np.array(burned_samples), delta_conf)
-            elif bound_type == "MPeB":
-                upper_bnd = bound_methods.empirical_bernstein_bnd(burned_samples, delta_conf, b)
             elif bound_type == "WFCB":
                 upper_bnd = wfcb
                 
@@ -135,37 +120,4 @@ for bound_type in bounds:
 
 plt.show()
     
-##code to plot distribution over estiamted value differences
-#all_samples = []
-#for rep in range(num_reps):
-##print rep
-#filename = "/home/daniel/Code/PeARL_BIRL/data/fcountToyMLE/fcount_badeval_alpha" + str(alpha) + "_chain" + str(num_mcmc_samples) + "_L1sampleflag" + str(sample_flag) + "_steps" +str(num_steps) + "_rep" + str(rep)+ ".txt";
-##print filename
-#f = open(filename,'r')   
-#f.readline()                                #clear out comment from buffer
-#actual = (float(f.readline())) #get the true ratio 
-##print "actual", actual
-#f.readline()                                #clear out ---
-#samples = []
-#for line in f:                              #read in the mcmc chain
-#    val = float(line)                       
-#    samples.append(float(line))
-##print samples
-##burn 
-#burned_samples = samples[burn::skip]
-#all_samples.extend(burned_samples)
-#print "max val", max(all_samples)
-#print "min val", min(all_samples)
-#print "ave val", np.mean(all_samples)
-#print "median val", np.median(all_samples)
-#plt.figure(1)
-#plt.xticks(fontsize=16)  
-#plt.yticks(fontsize=16)  
-#plt.hist(all_samples,bins=60)
-#plt.title(r"Distribution over MCMC chain for $\pi_2$", fontsize = 18)
-#plt.xlabel("Absolute Value Difference ",fontsize=18)
-#plt.ylabel("frequency",fontsize=18)
-#plt.tight_layout()
-#plt.legend(loc='best')
-#plt.savefig("/home/daniel/Documents/ScottResearch/SafeIRL/samplingL1UnitBall/UnitSphereSampling/badpolicyValueDiffDist.png")
-#plt.show()
+
