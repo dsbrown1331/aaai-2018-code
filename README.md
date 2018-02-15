@@ -11,7 +11,7 @@
   - Make a build directory: `mkdir build`
   - Make a data directory to hold results: `mkdir data`
   
-  #### Infinite Horizon GridWorld (Figure 2 in <a href="https://arxiv.org/abs/1707.00724">AAAI 2018 paper</a>)
+  #### Infinite Horizon GridWorld (Figure 2 in [AAAI 2018 paper](https://arxiv.org/abs/1707.00724))
   - Use `make gridworld_basic_exp` to build the experiment.
   - Execute `./gridworld_basic_exp` to run. Data will be output to `./data/gridworld`
   - Experiment will take some time to run since it runs 200 replicates for each number of demonstrations. Experiment parameters can be set in `src/gridWorldBasicExperiment.cpp`. 
@@ -20,7 +20,7 @@
   
   
   #### Sensitivity to Confidence Parameter (Figure 3 in <a href="https://arxiv.org/abs/1707.00724">AAAI 2018 paper</a>)
-    - UNDER CONSTRUCTION
+  - UNDER CONSTRUCTION
   - Use `make gridworld_noisydemo_exp` to build the experiment.
   - Execute `./gridworld_noisydemo_exp` to run. Data will be output to `./data/gridworld_noisydemo_exp/`
   - Experiment will take some time to run since it runs 200 replicates for each number of demonstrations. Experiment parameters can be set in `src/gridWorldNoisyDemoExperiment.cpp`. 
@@ -28,7 +28,7 @@
   
   
   #### Comparison with theoretical bounds (Table 1 in in <a href="https://arxiv.org/abs/1707.00724">AAAI 2018 paper</a>)
-    - UNDER CONSTRUCTION
+  - UNDER CONSTRUCTION
   - Use `make gridworld_projection_exp` to build the experiment.
   - Execute `./gridworld_projection_exp` to run. Data will be output to `./data/abbeel_projection/`
   - Experiment will take some time to run since it runs 200 replicates for each number of demonstrations. Experiment parameters can be set in `src/gridWorldProjectionEvalExperiment.cpp`. 
