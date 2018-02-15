@@ -35,4 +35,13 @@
   - Experiment will take some time to run since it runs 200 replicates for each number of demonstrations. Experiment parameters can be set in `src/gridWorldProjectionEvalExperiment.cpp`. 
   - Once experiment has finished run `python scripts/generateProjectionEvalTable.py` to generate table used in paper.
   
+  
+  #### Policy Selection for Driving Domain
+  - UNDER CONSTRUCTION
+  
+  #### Policy Improvement
+  - UNDER CONSTRUCTION
+    
+  
+  
 
