@@ -1,6 +1,6 @@
 # Efficient Probabilistic Performance Bounds for Inverse Reinforcement Learning
 ## Daniel S. Brown and Scott Niekum
-### Follow the instructions below to reproduce results in our <a href="https://arxiv.org/abs/1707.00724">AAAI 2018</a> and <a href="https://www.cs.utexas.edu/~dsbrown/pubs/Brown_AAAIFS17.pdf">AAAI 2017 Fall Symposium</a> papers.
+### Follow the instructions below to reproduce results in our [AAAI 2018](https://arxiv.org/abs/1707.00724) and our [AAAI 2017 Fall Symposium](https://www.cs.utexas.edu/~dsbrown/pubs/Brown_AAAIFS17.pdf) papers.
 
  
   #### Dependencies
@@ -19,7 +19,7 @@
   
   
   
-  #### Sensitivity to Confidence Parameter (Figure 3 in <a href="https://arxiv.org/abs/1707.00724">AAAI 2018 paper</a>)
+  #### Sensitivity to Confidence Parameter (Figure 3 in [AAAI 2018 paper](https://arxiv.org/abs/1707.00724))
   - UNDER CONSTRUCTION
   - Use `make gridworld_noisydemo_exp` to build the experiment.
   - Execute `./gridworld_noisydemo_exp` to run. Data will be output to `./data/gridworld_noisydemo_exp/`
@@ -27,7 +27,7 @@
   - Once experiment has finished run `python scripts/generateNoisyDemoPlots.py` to generate figures used in paper.
   
   
-  #### Comparison with theoretical bounds (Table 1 in in <a href="https://arxiv.org/abs/1707.00724">AAAI 2018 paper</a>)
+  #### Comparison with theoretical bounds (Table 1 in in [AAAI 2018 paper](https://arxiv.org/abs/1707.00724))
   - UNDER CONSTRUCTION
   - Use `make gridworld_projection_exp` to build the experiment.
   - Execute `./gridworld_projection_exp` to run. Data will be output to `./data/abbeel_projection/`
