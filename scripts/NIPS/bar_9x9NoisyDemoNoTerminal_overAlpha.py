@@ -17,6 +17,8 @@ alphas = [0,1,5,10,50]
 size = 9
 num_reps = 200
 rolloutLength = 100
+stochastic = 1
+randActionProb = 0.2
 numDemos = [1,5,9]
 tol = 0.0001
 gamma = 0.9
@@ -28,8 +30,7 @@ fmts = ['o-','s--','^-.', '*:','>-','d--']
 b = 2 * 1.0/(1.0 - gamma)  #upper bound on random variables for concentration inequalities
 c = 10 #truncation value for MPeBCollapsed (Phil's method)
 
-filePath8_1 = "/home/dsbrown/Code/PeARL_BIRL/data/experiment8_1/"
-filePath8_2 = "/home/dsbrown/Code/PeARL_BIRL/data/experiment8_2/"
+filePath = "./data/gridworld_noisydemo_exp/
 
 print "UPPER BOUND ON SAMPLES IS b =", b
 color=iter(cm.rainbow(np.linspace(0,1,6)))
@@ -48,12 +49,9 @@ for numDemo in numDemos:
       
     print "=========", numDemo, "========="
     for rep in range(num_reps):
-        if alpha in [5,50]:
-            filename = filePath8_2 + "numdemos" +  str(numDemo) + "_alpha" + str(alpha) + "_chain" + str(chain_length) +  "_step" + str(step) + "0000_L1sampleflag" + str(sample_flag) +  "_rolloutLength" + str(rolloutLength) +   "_stochastic1_randActionProb0.200000_rep" + str(rep)+ ".txt"
-        else:
-            filename = filePath8_1 + "numdemos" +  str(numDemo) + "_alpha" + str(alpha) + "_chain" + str(chain_length) +  "_step" + str(step) + "0000_L1sampleflag" + str(sample_flag) +  "_rolloutLength" + str(rolloutLength) +   "_stochastic1_randActionProb0.200000_rep" + str(rep)+ ".txt"
+        filename = "NoisyDemo_numdemos" +  str(numDemo) + "_alpha" + str(alpha) + "_chain" + str(chain_length) +  "_step" + str(step) + "0000_L1sampleflag" + str(sample_flag) +  "_rolloutLength" + str(rolloutLength) +   "_stochastic" + str(stochastic) + "_randActionProb" + str(randActionProb) + "00000_rep" + str(rep)+ ".txt"
         #print filename
-        f = open(filename,'r')   
+        f = open(filePath + filename,'r')   
         f.readline()                                #clear out comment from buffer
         actual = (float(f.readline())) #get the true ratio 
         #print "actual", actual
