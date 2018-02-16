@@ -16,7 +16,12 @@
   - Execute `./gridworld_basic_exp` to run. Data will be output to `./data/gridworld`
   - Experiment will take some time to run since it runs 200 replicates for each number of demonstrations. Experiment parameters can be set in `src/gridWorldBasicExperiment.cpp`. 
   - Once experiment has finished run `python scripts/generateGridWorldBasicPlots.py` to generate figures used in paper.
-  
+  - You should get something similar to the following two plots
+
+<div>
+  <img src="figs/boundAccuracy.png" width="350">
+  <img src="figs/boundError.png" width="350">
+</div>
   
   
   #### Sensitivity to Confidence Parameter (Figure 3 in [AAAI 2018 paper](https://arxiv.org/abs/1707.00724))
@@ -25,7 +30,14 @@
   - Execute `./gridworld_noisydemo_exp` to run. Data will be output to `./data/gridworld_noisydemo_exp/`
   - Experiment will take some time to run since it runs 200 replicates for each number of demonstrations. Experiment parameters can be set in `src/gridWorldNoisyDemoExperiment.cpp`. 
   - Once experiment has finished run `python scripts/generateNoisyDemoPlots.py` to generate figures used in paper.
-  - The values for confidence c=0 are different than shown in paper. We are working on determining the reason for this discrepancy.
+  - You should get something similar to the following two plots
+
+<div>
+  <img src="figs/noisydemo_accuracy_overAlpha.png" width="350">
+  <img src="figs/noisydemo_bound_error_overAlpha.png" width="350">
+</div>
+
+   - Note that the bounds when c=0 are different than shown in paper. We are working on determining the reason for this discrepancy and it is probably due to an error in the original experiment execution and analysis.
   
   
   #### Comparison with theoretical bounds (Table 1 in in [AAAI 2018 paper](https://arxiv.org/abs/1707.00724))
