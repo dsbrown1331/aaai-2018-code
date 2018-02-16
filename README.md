@@ -16,7 +16,12 @@
   - Execute `./gridworld_basic_exp` to run. Data will be output to `./data/gridworld`
   - Experiment will take some time to run since it runs 200 replicates for each number of demonstrations. Experiment parameters can be set in `src/gridWorldBasicExperiment.cpp`. 
   - Once experiment has finished run `python scripts/generateGridWorldBasicPlots.py` to generate figures used in paper.
-  
+  - You should get something similar to the following two plots
+
+<div>
+  <img src="figs/boundAccuracy.png" width="350">
+  <img src="figs/boundError.png" width="350">
+</div>
   
   
   #### Sensitivity to Confidence Parameter (Figure 3 in [AAAI 2018 paper](https://arxiv.org/abs/1707.00724))
@@ -25,15 +30,28 @@
   - Execute `./gridworld_noisydemo_exp` to run. Data will be output to `./data/gridworld_noisydemo_exp/`
   - Experiment will take some time to run since it runs 200 replicates for each number of demonstrations. Experiment parameters can be set in `src/gridWorldNoisyDemoExperiment.cpp`. 
   - Once experiment has finished run `python scripts/generateNoisyDemoPlots.py` to generate figures used in paper.
-  - The values for confidence c=0 are different than shown in paper. We are working on determining the reason for this discrepancy.
+  - You should get something similar to the following two plots
+
+<div>
+  <img src="figs/noisydemo_accuracy_overAlpha.png" width="350">
+  <img src="figs/noisydemo_bound_error_overAlpha.png" width="350">
+</div>
+
+   - Note that the bounds when c=0 are different than shown in paper. We are working on determining the reason for this discrepancy.
   
   
   #### Comparison with theoretical bounds (Table 1 in in [AAAI 2018 paper](https://arxiv.org/abs/1707.00724))
-  - UNDER CONSTRUCTION
   - Use `make gridworld_projection_exp` to build the experiment.
   - Execute `./gridworld_projection_exp` to run. Data will be output to `./data/abbeel_projection/`
   - Experiment will take some time to run since it runs 200 replicates for each number of demonstrations. Experiment parameters can be set in `src/gridWorldProjectionEvalExperiment.cpp`. 
-  <!---  - Once experiment has finished run `python scripts/generateProjectionEvalTable.py` to generate table used in paper. -->
+  - Once experiment has finished run `python scripts/generateProjectionEvalData.py` to generate data used in paper.
+  - We reran the experiment from our paper and got the following results (slightly different from paper due to random seeding):
+  
+   | Bound            | 1 demo | 5 demos | 9 demos | 23052 demos | Ave Accuracy |
+| ------------------- |:-----:   | :----:   | :----:    | :----:        | :----:        |
+| 0.95-VaR EVD Bound  |  0.9392 | 0.2570 | 0.1370 | - | 0.98|
+| 0.99-VaR EVD Bound  |1.1448  | 0.2972  | 0.1575 | - |  1.0 |
+| Syed and Schapire 2008  | 142.59 | 63.77  | 47.53   | 0.9392 | 1.0 |
   
   
   #### Policy Selection for Driving Domain
