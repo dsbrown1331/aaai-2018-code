@@ -37,7 +37,7 @@
   <img src="figs/noisydemo_bound_error_overAlpha.png" width="350">
 </div>
 
-   - Note that the bounds when c=0 are different than shown in paper. We are working on determining the reason for this discrepancy and it is probably due to an error in the original experiment execution and analysis.
+   - Note that the bounds when c=0 are different than shown in paper. We are working on determining the reason for this discrepancy.
   
   
   #### Comparison with theoretical bounds (Table 1 in in [AAAI 2018 paper](https://arxiv.org/abs/1707.00724))
