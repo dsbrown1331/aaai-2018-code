@@ -48,7 +48,7 @@
   - We reran the experiment from our paper and got the following results (slightly different from paper due to random seeding):
   
    | Bound            | 1 demo | 5 demos | 9 demos | 23052 demos | Ave Accuracy |
-| ------------------- |-----   | -----   | ----    | ----        | ----        |
+| ------------------- |:-----:   | :----:   | :----:    | :----:        | :----:        |
 | 0.95-VaR EVD Bound  |  0.9392 | 0.2570 | 0.1370 | - | 0.98|
 | 0.99-VaR EVD Bound  |1.1448  | 0.2972  | 0.1575 | - |  1.0 |
 | Syed and Schapire 2008  | 142.59 | 63.77  | 47.53   | 0.9392 | 1.0 |
