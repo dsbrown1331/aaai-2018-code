@@ -65,9 +65,7 @@ for numDemo in numDemos:
         burned_samples = samples[burn::skip]
         #print "max sample", np.max(burned_samples)
         #compute confidence bound
-        if bound_type == "VAR":
-            upper_bnd = bound_methods.value_at_risk(burned_samples, delta_conf)
-        elif bound_type == "VaR 99":
+        if bound_type == "VaR 99":
             upper_bnd = bound_methods.percentile_confidence_upper_bnd(burned_samples, 0.99, delta_conf)
         elif bound_type == "VaR 95":
             upper_bnd = bound_methods.percentile_confidence_upper_bnd(burned_samples, 0.95, delta_conf)
