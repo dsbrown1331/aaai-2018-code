@@ -51,7 +51,7 @@ for numDemo in numDemos:
         f = open(filePath + filename,'r')   
         f.readline()                                #clear out comment from buffer
         actual = (float(f.readline())) #get the true ratio 
-        print("actual", actual)
+        #print("actual", actual)
         f.readline()                                #clear out ---
         wfcb = (float(f.readline())) #get the worst-case feature count bound
         f.readline()  #clear out ---
@@ -78,7 +78,7 @@ for numDemo in numDemos:
             
         
         
-        print("upper bound", upper_bnd)
+        #print("upper bound", upper_bnd)
         predicted.append(upper_bnd)
         true_perf_ratio.append(actual)
         bound_error.append(upper_bnd - actual)
@@ -87,12 +87,12 @@ for numDemo in numDemos:
         if (predicted[i] >= true_perf_ratio[i]) or np.abs(predicted[i] - true_perf_ratio[i]) < tol:
             accuracy += 1.0
     accuracy = accuracy / len(predicted)
-    print(bound_type)
-    print(predicted)
-    print("accuracy", accuracy)
+    #print(bound_type)
+    #print(predicted)
+    #print("accuracy", accuracy)
     accuracies.append(accuracy)
     average_bound_error.append(np.mean(bound_error))
-    print()
+    #print()
 print(average_bound_error)
 c = next(color)
 plt.figure(1)
@@ -120,13 +120,13 @@ for alpha in alphas:
           
         print("=========", numDemo, "=========")
         for rep in range(num_reps):
-            print("rep",rep)
+            #print("rep",rep)
             filename = "NoisyDemo_numdemos" +  str(numDemo) + "_alpha" + str(alpha) + "_chain" + str(chain_length) +  "_step" + str(step) + "0000_L1sampleflag" + str(sample_flag) +  "_rolloutLength" + str(rolloutLength) +   "_stochastic" + str(stochastic) + "_randActionProb" + str(randActionProb) + "00000_rep" + str(rep)+ ".txt"
             #print filename
             f = open(filePath + filename,'r')   
             f.readline()                                #clear out comment from buffer
             actual = (float(f.readline())) #get the true ratio 
-            print("actual", actual)
+            #print("actual", actual)
             f.readline()                                #clear out ---
             wfcb = (float(f.readline())) #get the worst-case feature count bound
             f.readline()  #clear out ---
@@ -153,7 +153,7 @@ for alpha in alphas:
                 
             
             
-            print ("upper bound", upper_bnd)
+            #print ("upper bound", upper_bnd)
             predicted.append(upper_bnd)
             true_perf_ratio.append(actual)
             bound_error.append(upper_bnd - actual)
@@ -162,12 +162,12 @@ for alpha in alphas:
             if (predicted[i] >= true_perf_ratio[i]) or np.abs(predicted[i] - true_perf_ratio[i]) < tol:
                 accuracy += 1.0
         accuracy = accuracy / len(predicted)
-        print(bound_type)
-        print(predicted)
-        print("accuracy", accuracy)
+        #print(bound_type)
+        #print(predicted)
+        #print("accuracy", accuracy)
         accuracies.append(accuracy)
         average_bound_error.append(np.mean(bound_error))
-        print()
+        #print()
     print(average_bound_error)
     c = next(color)
     plt.figure(1)
@@ -188,7 +188,7 @@ plt.legend(fontsize=18)
 plt.xlabel('number of demonstrations',fontsize=19)
 plt.ylabel('average bound error',fontsize=19)
 plt.tight_layout()
-plt.savefig("noisydemo_bound_error_overAlpha.png") 
+plt.savefig("./figs/noisydemo_bound_error_overAlpha.png") 
 
 plt.figure(2)
 plt.yticks(fontsize=18)
@@ -197,6 +197,6 @@ plt.legend(fontsize=18, loc='lower left')
 plt.xlabel('number of demonstrations',fontsize=19)
 plt.ylabel('accuracy',fontsize=19)
 plt.tight_layout()
-plt.savefig("noisydemo_accuracy_overAlpha.png") 
+plt.savefig("./figs/noisydemo_accuracy_overAlpha.png") 
 plt.show()
 

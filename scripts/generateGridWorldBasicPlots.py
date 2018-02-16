@@ -27,8 +27,6 @@ fmts = ['o-','s--','^-.', '*:','>-','d--']
 filePath = "data/gridworld/"
 
 
-print("UPPER BOUND ON SAMPLES IS b =", b)
-
 for bound_type in bounds:
     accuracies = []
     average_bound_error = []
@@ -100,7 +98,7 @@ for bound_type in bounds:
     plt.legend(loc='best', fontsize=19)
     plt.tight_layout()
 
-    #plt.savefig("upperBoundError9x9gridNoTerminal_NoDups_alpha" + str(alpha) + ".png")
+    plt.savefig("./figs/boundError.png")
 
     fig_cnt = 2
     plt.figure(fig_cnt)
@@ -114,7 +112,7 @@ for bound_type in bounds:
     plt.yticks([0.84,0.86, 0.88, 0.90, 0.92, 0.94, 0.96, 0.98, 1.0, 1.001],[0.84, 0.86,0.88, 0.90, 0.92, 0.94, 0.96, 0.98, 1.0,''], fontsize=18)
     plt.legend(loc='lower right',fontsize=19)
     plt.tight_layout()
-    #plt.savefig("accuracy9x9gridNoTerminal_expNoDups_alpha" + str(alpha) + ".png") 
+    plt.savefig("./figs/boundAccuracy.png") 
     
 
 
