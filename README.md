@@ -57,9 +57,19 @@
   #### Policy Selection for Driving Domain
   - UNDER CONSTRUCTION
   
-  #### Policy Improvement
-  - UNDER CONSTRUCTION
-    
+  #### Policy Improvement (Figure 4 in [AAAI 2018 paper](https://arxiv.org/abs/1707.00724))
+  - Use `make improvement_exp` to build the experiment.
+  - Execute `./improvement_exp` to run. 
+  - The minimum VaR policy will be printed to the terminal. 
   
+  
+  #### Demonstration Sufficiency (Figure 4 in  [AAAI 2017 Fall Symposium Paper](https://www.cs.utexas.edu/~dsbrown/pubs/Brown_AAAIFS17.pdf))
+  - Use `make demo_sufficiency_exp` to build the experiment.
+  - Execute `./demo_sufficiency_exp` to run. Data will be output to `./data/demo_sufficiency/`
+  - Once experiment has finished run `python scripts/generateDemoSufficiencyPlot.py` to generate plot 4 (b).
+  - You should get the following figure.
+  <div>
+  <img src="figs/demoSufficiency.png" width="350">
+  </div>
   
 
