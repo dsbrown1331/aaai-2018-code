@@ -4,9 +4,12 @@
 #include "../include/grid_domains.hpp"
 #include "../include/confidence_bounds.hpp"
 #include "../include/unit_norm_sampling.hpp"
-#include "../include/maxent_feature_birl.hpp"
+#include "../include/feature_birl.hpp"
 #include <fstream>
 #include <string>
+
+//example where VaR performance bound could be used to detect when enough demonstrations
+//have been given
 
 using namespace std;
 
@@ -18,8 +21,8 @@ int main()
     const unsigned int reps = 20;                    //repetitions per setting
     const vector<unsigned int> numDemos = {1,2,3};            //number of demos to give
     const vector<unsigned int> rolloutLengths = {100};          //max length of each demo
-    const vector<double> alphas = {100}; //50                    //confidence param for BIRL
-    const unsigned int chain_length = 10000;//1000;//5000;        //length of MCMC chain
+    const vector<double> alphas = {100};                    //confidence param for BIRL
+    const unsigned int chain_length = 10000;      //length of MCMC chain
     const int sample_flag = 4;                      //param for mcmc walk type
     const int num_steps = 10;                       //tweaks per step in mcmc
     const bool mcmc_reject_flag = true;             //allow for rejects and keep old weights
@@ -28,7 +31,7 @@ int main()
     const double max_r = 1;
     bool removeDuplicates = true;
     bool stochastic = false;
-    int posterior_flag = 0;
+
 
     int startSeed = 1321;
     double eps = 0.001;
@@ -39,11 +42,14 @@ int main()
     const int width = 3;
     const int height = 4;
     double gamma = 0.95;
-    //double** stateFeatures = initFeaturesToyFeatureDomain5x5(numStates, numFeatures);  
-//    double** stateFeatures = random9x9GridNavGoalWorld();
-//    double** stateFeatures = random9x9GridNavGoalWorld8Features();
+
     vector<unsigned int> initStates = {11,0,2};
     vector<unsigned int> termStates = {9};
+    
+    //create directory for results
+    string filePath = "./data/demo_sufficiency/";
+    string mkdirFilePath = "mkdir -p " + filePath;
+    system(mkdirFilePath.c_str());
 
 for(unsigned int rolloutLength : rolloutLengths)
 {
@@ -61,7 +67,7 @@ for(unsigned int rolloutLength : rolloutLengths)
             for(unsigned int rep = 0; rep < reps; rep++)
             {
                 //set up file for output
-                string filename = "numdemos" +  to_string(numDemo) 
+                string filename = "Demo_sufficiency_numdemos" +  to_string(numDemo) 
                                 + "_alpha" + to_string((int)alpha) 
                                 + "_chain" + to_string(chain_length) 
                                 + "_step" + to_string(step)
@@ -70,7 +76,7 @@ for(unsigned int rolloutLength : rolloutLengths)
                                 + "_stochastic" + to_string(stochastic)
                                 + "_rep" + to_string(rep)+ ".txt";
                 cout << filename << endl; 
-                ofstream outfile("data/enoughIsEnough/experiment_toy/" + filename);
+                ofstream outfile(filePath + filename);
             
                 srand(startSeed + 31*rep);
                 cout << "------Rep: " << rep << "------" << endl;
@@ -81,7 +87,7 @@ for(unsigned int rolloutLength : rolloutLengths)
                 vector<pair<unsigned int,unsigned int> > good_demos;
                 vector<vector<pair<unsigned int,unsigned int> > > trajectories; //used for feature counts
               
-                ///  create a random weight vector with seed and increment of rep number so same across reps
+                /// "true" reward function
                 double* featureWeights = new double[5];
                 featureWeights[0] = 0;      //white
                 featureWeights[1] = -0.5;   //red
@@ -145,7 +151,7 @@ for(unsigned int rolloutLength : rolloutLengths)
 
                 ///  run BIRL to get chain and Map policyLoss ///
                 //give it a copy of mdp to initialize
-                FeatureBIRL birl(&fmdp, min_r, max_r, chain_length, step, alpha, sample_flag, mcmc_reject_flag, num_steps, posterior_flag);
+                FeatureBIRL birl(&fmdp, min_r, max_r, chain_length, step, alpha, sample_flag, mcmc_reject_flag, num_steps);
                 birl.addPositiveDemos(good_demos);
                 //birl.displayDemos();
                 birl.run(eps);
@@ -235,93 +241,6 @@ for(unsigned int rolloutLength : rolloutLengths)
         }
     }
 }
-//    double featureWeights[] = {0,-1,+1,0,0};
-//    
-
-
-//    //set up terminals and inits
-
-//    vector<unsigned int> demoStates = initStates;
-//   
-//    FeatureGridMDP fmdp(size, size, initStates, termStates, numFeatures, featureWeights, stateFeatures, gamma);
-
-//    cout << "\nInitializing feature gridworld of size " << size << " by " << size << ".." << endl;
-//    cout << "    Num states: " << fmdp.getNumStates() << endl;
-//    cout << "    Num actions: " << fmdp.getNumActions() << endl;
-
-//    cout << " Features" << endl;
-
-//    displayStateColorFeatures(stateFeatures, 5, 5, numFeatures);
-
-//    cout << "\n-- True Rewards --" << endl;
-//    fmdp.displayRewards();
-
-//    //solve for the optimal policy
-//    vector<unsigned int> opt_policy (fmdp.getNumStates());
-//    fmdp.valueIteration(0.001);
-//    cout << "-- value function ==" << endl;
-//    fmdp.displayValues();
-//    fmdp.deterministicPolicyIteration(opt_policy);
-//    cout << "-- optimal policy --" << endl;
-//    fmdp.displayPolicy(opt_policy);
-//    fmdp.calculateQValues();
-//    //cout << " Q values" << endl;
-//    //fmdp.displayQValues();
-//    cout << "state expected feature counts of optimal policy" << endl;
-//    double eps = 0.001;
-//    double** stateFeatureCnts = calculateStateExpectedFeatureCounts(opt_policy, &fmdp, eps);
-//    for(unsigned int s = 0; s < numStates; s++)
-//    {
-//        double* fcount = stateFeatureCnts[s];
-//        cout << "State " << s << ": ";
-//        for(unsigned int f = 0; f < numFeatures; f++)
-//            cout << fcount[f] << "\t";
-//        cout << endl;
-//    }
-//    
-//    cout << "calculate expected feature counts over initial states" << endl;
-//    double* expFeatureCnts = calculateExpectedFeatureCounts(opt_policy, &fmdp, eps);
-//    for(unsigned int f = 0; f < numFeatures; f++)
-//        cout << expFeatureCnts[f] << "\t";
-//    cout << endl;
-
-
-//    //test out empirical estimate of features for demonstrations
-//    int trajLength = 25;
-//    vector<vector<pair<unsigned int,unsigned int> > > trajectories;
-//    for(unsigned int s0 : demoStates)
-//    {
-//       cout << "demo from " << s0 << endl;
-//       vector<pair<unsigned int, unsigned int>> traj = fmdp.monte_carlo_argmax_rollout(s0, trajLength);
-//       //for(pair<unsigned int, unsigned int> p : traj)
-//           //cout << "(" <<  p.first << "," << p.second << ")" << endl;
-//       trajectories.push_back(traj);
-//    }
-//    double* demoFcounts = calculateEmpiricalExpectedFeatureCounts(trajectories, &fmdp);
-//    cout << "Demo f counts" << endl;
-//    for(unsigned int f = 0; f < numFeatures; f++)
-//        cout << demoFcounts[f] << "\t";
-//    cout << endl;
-
-//    cout << "WFCB" << endl;
-//    double wfcb = calculateWorstCaseFeatureCountBound(opt_policy, &fmdp, trajectories, eps);
-//    cout << wfcb << endl;
-//    
-//    cout << "True diff" << endl;
-
-//    
-
-//    cout << "Freeing variables" << endl;
-//    for(unsigned int s1 = 0; s1 < numStates; s1++)
-//    {
-//        delete[] stateFeatures[s1];
-//        delete[] stateFeatureCnts[s1];
-//    }
-//    delete[] stateFeatures;
-//    delete[] stateFeatureCnts;
-//    delete[] demoFcounts;
-//    delete[] expFeatureCnts;
-
 
 }
 

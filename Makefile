@@ -16,6 +16,12 @@ gridworld_noisydemo_exp: build/gridWorldNoisyDemoExperiment.o
 gridworld_projection_exp: build/gridWorldProjectionEvalExperiment.o
 	$(CC) $(LFLAGS) build/gridWorldProjectionEvalExperiment.o  -o gridworld_projection_exp
 	
+improvement_exp: build/improvementExample.o
+	$(CC) $(LFLAGS) -pg build/improvementExample.o  -o improvement_exp
+	
+demo_sufficiency_exp: build/demoSufficiencyExample.o
+	$(CC) $(LFLAGS) -pg build/demoSufficiencyExample.o  -o demo_sufficiency_exp
+	
 build/gridWorldBasicExperiment.o: src/gridWorldBasicExperiment.cpp include/mdp.hpp include/confidence_bounds.hpp include/feature_birl.hpp include/grid_domains.hpp include/unit_norm_sampling.hpp
 	$(CC) $(CFLAGS) src/gridWorldBasicExperiment.cpp -o build/gridWorldBasicExperiment.o
 
@@ -24,6 +30,12 @@ build/gridWorldNoisyDemoExperiment.o: src/gridWorldNoisyDemoExperiment.cpp inclu
 	
 build/gridWorldProjectionEvalExperiment.o: src/gridWorldProjectionEvalExperiment.cpp include/mdp.hpp include/confidence_bounds.hpp include/feature_birl.hpp include/grid_domains.hpp include/unit_norm_sampling.hpp include/abbeel_projection.hpp
 	$(CC) $(CFLAGS) src/gridWorldProjectionEvalExperiment.cpp -o build/gridWorldProjectionEvalExperiment.o
+	
+build/improvementExample.o: src/improvementExample.cpp include/mdp.hpp include/confidence_bounds.hpp include/grid_domains.hpp include/unit_norm_sampling.hpp include/maxent_feature_birl.hpp
+	$(CC) $(CFLAGS) -pg src/improvementExample.cpp -o build/improvementExample.o
+	
+build/demoSufficiencyExample.o: src/demoSufficiencyExample.cpp include/mdp.hpp include/confidence_bounds.hpp include/grid_domains.hpp include/unit_norm_sampling.hpp include/feature_birl.hpp
+	$(CC) $(CFLAGS) -pg src/demoSufficiencyExample.cpp -o build/demoSufficiencyExample.o
 
 feature: feature_test mdp_test feature_birl_test
 

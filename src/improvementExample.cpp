@@ -4,10 +4,12 @@
 #include "../include/grid_domains.hpp"
 #include "../include/confidence_bounds.hpp"
 #include "../include/unit_norm_sampling.hpp"
-#include "../include/maxent_feature_birl.hpp"
+#include "../include/feature_birl.hpp"
 #include <fstream>
 #include <string>
 
+//Given one demonstration, find MAP reward and corresponding policy,
+//then run policy improvement algorithm by making local changes (changing one action at one state) and calculating the VaR 
 
 using namespace std;
 
@@ -29,7 +31,6 @@ int main()
     const double max_r = 1;
     bool removeDuplicates = true;
     bool stochastic = false;
-    int posterior_flag = 0;
 
     int startSeed = 1321;
     double eps = 0.001;
@@ -40,15 +41,12 @@ int main()
     const int width = 5;
     const int height = 5;
     double gamma = 0.95;
-    //double** stateFeatures = initFeaturesToyFeatureDomain5x5(numStates, numFeatures);  
-//    double** stateFeatures = random9x9GridNavGoalWorld();
-//    double** stateFeatures = random9x9GridNavGoalWorld8Features();
+
     vector<unsigned int> initStates = {5,4};
     vector<unsigned int> termStates = {12};
     
     double VaR = 0.99;
-    int numSteps = 100;
-    int numTweaks = 1;
+
 //go until can't improve (found local optima)
 srand(startSeed);
 
@@ -121,7 +119,7 @@ for(vector<pair<unsigned int, unsigned int> > traj : trajectories)
 
 ///  run BIRL to get chain and Map policyLoss ///
 //give it a copy of mdp to initialize
-FeatureBIRL birl(&fmdp, min_r, max_r, chain_length, step, alpha, sample_flag, mcmc_reject_flag, num_steps, posterior_flag);
+FeatureBIRL birl(&fmdp, min_r, max_r, chain_length, step, alpha, sample_flag, mcmc_reject_flag, num_steps);
 birl.addPositiveDemos(good_demos);
 //birl.displayDemos();
 birl.run(eps);
@@ -131,12 +129,12 @@ cout << "Recovered reward" << endl;
 mapMDP->displayRewards();
 
 
-//initialize random policy
+//initialize policy to be optimal for Maximum Likelihood reward (MAP under uniform prior)
 vector<unsigned int> eval_pi (mapMDP->getNumStates()); 
 mapMDP->valueIteration(eps);  
 mapMDP->calculateQValues();         
 mapMDP->getOptimalPolicy(eval_pi);
-cout << "init policy" << endl;
+cout << "Optimal policy for Maximum Likelihood reward" << endl;
 mapMDP->displayPolicy(eval_pi);
 //do inline and cheat...
 vector<double> evds;
@@ -190,33 +188,7 @@ while(true)
         {
               new_pi[rand_state] = i;
         
-//            //solve for the optimal policy
-//            vector<unsigned int> eval_pi (mapMDP->getNumStates());
-//            mapMDP->valueIteration(eps);
-//            mapMDP->calculateQValues();
-//            mapMDP->getOptimalPolicy(eval_pi);
-////                cout << "-- value function ==" << endl;
-////                mapMDP->displayValues();
-//            cout << "-- optimal policy --" << endl;
-//            mapMDP->displayPolicy(eval_pi);
-//            eval_pi = {3,3,1,2,1,
-//                       0,3,1,2,1,
-//                       0,3,1,2,1,
-//                       0,3,0,2,1,
-//                       0,3,0,2,2};
-        //cout << "--- new eval policy ---" << endl;
-        //mapMDP->displayPolicy(new_pi);
-        //cout << "\nPosterior Probability: " << birl.getMAPposterior() << endl;
-        //double base_loss = policyLoss(eval_pi, &fmdp);
-        //cout << "Current policy loss: " << base_loss << "%" << endl;
 
-        /// We use the Map Policy as the evaluation policy
-
-        
-        
-        //write true return,  actual difference, worst-case, and chain info to file
-        //outfile << "#true return --- true diff --- wfcb --- mcmc ratios" << endl;
-        //do inline and cheat...
         vector<double> evds_new;
         
         for(unsigned int i=0; i<chain_length; i++)
@@ -242,8 +214,8 @@ while(true)
             //cout << "Eval Policy" << endl; 
             double Vhat = evaluateExpectedReturn(new_pi, sampleMDP, eps);
             //cout << Vhat << endl;
-            double VabsDiff = abs(Vstar - Vhat);
-            evds_new.push_back(VabsDiff);
+            double VDiff = Vstar - Vhat;
+            evds_new.push_back(VDiff);
             //cout << "abs diff: " << VabsDiff << endl;
             //outfile << VabsDiff << endl;
         }    
@@ -281,9 +253,9 @@ while(true)
 }
 
 
-cout << "best" << endl;
+cout << "minimum VaR policy" << endl;
 mapMDP->displayPolicy(eval_pi);
-cout << "best VaR = " << eval_VaR << endl; 
+cout << "minimum VaR = " << eval_VaR << endl; 
 
  //delete world
     for(unsigned int s1 = 0; s1 < numStates; s1++)
@@ -292,92 +264,6 @@ cout << "best VaR = " << eval_VaR << endl;
     }
     delete[] stateFeatures;
 
-//    double featureWeights[] = {0,-1,+1,0,0};
-//    
-
-
-//    //set up terminals and inits
-
-//    vector<unsigned int> demoStates = initStates;
-//   
-//    FeatureGridMDP fmdp(size, size, initStates, termStates, numFeatures, featureWeights, stateFeatures, gamma);
-
-//    cout << "\nInitializing feature gridworld of size " << size << " by " << size << ".." << endl;
-//    cout << "    Num states: " << fmdp.getNumStates() << endl;
-//    cout << "    Num actions: " << fmdp.getNumActions() << endl;
-
-//    cout << " Features" << endl;
-
-//    displayStateColorFeatures(stateFeatures, 5, 5, numFeatures);
-
-//    cout << "\n-- True Rewards --" << endl;
-//    fmdp.displayRewards();
-
-//    //solve for the optimal policy
-//    vector<unsigned int> opt_policy (fmdp.getNumStates());
-//    fmdp.valueIteration(0.001);
-//    cout << "-- value function ==" << endl;
-//    fmdp.displayValues();
-//    fmdp.deterministicPolicyIteration(opt_policy);
-//    cout << "-- optimal policy --" << endl;
-//    fmdp.displayPolicy(opt_policy);
-//    fmdp.calculateQValues();
-//    //cout << " Q values" << endl;
-//    //fmdp.displayQValues();
-//    cout << "state expected feature counts of optimal policy" << endl;
-//    double eps = 0.001;
-//    double** stateFeatureCnts = calculateStateExpectedFeatureCounts(opt_policy, &fmdp, eps);
-//    for(unsigned int s = 0; s < numStates; s++)
-//    {
-//        double* fcount = stateFeatureCnts[s];
-//        cout << "State " << s << ": ";
-//        for(unsigned int f = 0; f < numFeatures; f++)
-//            cout << fcount[f] << "\t";
-//        cout << endl;
-//    }
-//    
-//    cout << "calculate expected feature counts over initial states" << endl;
-//    double* expFeatureCnts = calculateExpectedFeatureCounts(opt_policy, &fmdp, eps);
-//    for(unsigned int f = 0; f < numFeatures; f++)
-//        cout << expFeatureCnts[f] << "\t";
-//    cout << endl;
-
-
-//    //test out empirical estimate of features for demonstrations
-//    int trajLength = 25;
-//    vector<vector<pair<unsigned int,unsigned int> > > trajectories;
-//    for(unsigned int s0 : demoStates)
-//    {
-//       cout << "demo from " << s0 << endl;
-//       vector<pair<unsigned int, unsigned int>> traj = fmdp.monte_carlo_argmax_rollout(s0, trajLength);
-//       //for(pair<unsigned int, unsigned int> p : traj)
-//           //cout << "(" <<  p.first << "," << p.second << ")" << endl;
-//       trajectories.push_back(traj);
-//    }
-//    double* demoFcounts = calculateEmpiricalExpectedFeatureCounts(trajectories, &fmdp);
-//    cout << "Demo f counts" << endl;
-//    for(unsigned int f = 0; f < numFeatures; f++)
-//        cout << demoFcounts[f] << "\t";
-//    cout << endl;
-
-//    cout << "WFCB" << endl;
-//    double wfcb = calculateWorstCaseFeatureCountBound(opt_policy, &fmdp, trajectories, eps);
-//    cout << wfcb << endl;
-//    
-//    cout << "True diff" << endl;
-
-//    
-
-//    cout << "Freeing variables" << endl;
-//    for(unsigned int s1 = 0; s1 < numStates; s1++)
-//    {
-//        delete[] stateFeatures[s1];
-//        delete[] stateFeatureCnts[s1];
-//    }
-//    delete[] stateFeatures;
-//    delete[] stateFeatureCnts;
-//    delete[] demoFcounts;
-//    delete[] expFeatureCnts;
 
 
 }
