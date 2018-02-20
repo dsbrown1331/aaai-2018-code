@@ -71,5 +71,6 @@
   <div>
   <img src="figs/demoSufficiency.png" width="350">
   </div>
+  - Note that given a non-zero safety threshold on Value-at-Risk, say &epsilon; = 0.01, the agent would be able to report that it had learned the given task after two demonstrations, whereas using only feature counts makes it seem like three demonstrations are needed.
   
 
