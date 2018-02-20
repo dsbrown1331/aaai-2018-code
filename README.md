@@ -5,7 +5,6 @@
  
   #### Dependencies
   - Matplotlib (for generating figures)
-  - Python3 (for running scripts)
   
   #### Getting started
   - Make a build directory: `mkdir build`
