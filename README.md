@@ -57,8 +57,10 @@
   #### Policy Selection for Driving Domain
   - UNDER CONSTRUCTION
   
-  #### Policy Improvement
-  - UNDER CONSTRUCTION
+  #### Policy Improvement (Figure 4 in [AAAI 2018 paper](https://arxiv.org/abs/1707.00724))
+  - Use `make improvement_exp` to build the experiment.
+  - Execute `./improvement_exp` to run. 
+  - The minimum VaR policy will be shown in the terminal. 
     
   
   
