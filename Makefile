@@ -22,6 +22,9 @@ improvement_exp: build/improvementExample.o
 demo_sufficiency_exp: build/demoSufficiencyExample.o
 	$(CC) $(LFLAGS) -pg build/demoSufficiencyExample.o  -o demo_sufficiency_exp
 	
+driving_experiment: build/drivingExperiment.o
+	$(CC) $(LFLAGS) build/drivingExperiment.o  -I /usr/include/SDL -lSDL -lSDL_image -lpthread -lSDL_ttf -o driving_experiment	
+	
 build/gridWorldBasicExperiment.o: src/gridWorldBasicExperiment.cpp include/mdp.hpp include/confidence_bounds.hpp include/feature_birl.hpp include/grid_domains.hpp include/unit_norm_sampling.hpp
 	$(CC) $(CFLAGS) src/gridWorldBasicExperiment.cpp -o build/gridWorldBasicExperiment.o
 
@@ -36,6 +39,9 @@ build/improvementExample.o: src/improvementExample.cpp include/mdp.hpp include/c
 	
 build/demoSufficiencyExample.o: src/demoSufficiencyExample.cpp include/mdp.hpp include/confidence_bounds.hpp include/grid_domains.hpp include/unit_norm_sampling.hpp include/feature_birl.hpp
 	$(CC) $(CFLAGS) -pg src/demoSufficiencyExample.cpp -o build/demoSufficiencyExample.o
+	
+build/drivingExperiment.o: src/drivingExperiment.cpp include/q_learner_driving.hpp include/driving_world.hpp include/feature_birl_qlearning.hpp include/unit_norm_sampling.hpp include/confidence_bounds_qlearning.hpp
+	$(CC) $(CFLAGS) src/drivingExperiment.cpp -o build/drivingExperiment.o 
 
 feature: feature_test mdp_test feature_birl_test
 

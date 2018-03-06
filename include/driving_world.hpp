@@ -836,6 +836,7 @@ int DrivingWorld::handle_input()
     {
       case SDLK_LEFT: action = 0; break;
       case SDLK_RIGHT: action = 2; break;
+      default: break;
     }
   }
   return action;
