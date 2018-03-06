@@ -28,7 +28,8 @@ In the field of reinforcement learning there has been recent progress towards sa
 ```
  
   #### Dependencies
-  - Matplotlib (for generating figures)
+  - Matplotlib (for generating figures): https://matplotlib.org/users/installing.html
+  - SDL (only needed for car driving experiments):  ` sudo apt-get install libsdl-image1.2-dev libsdl1.2-dev libsdl-ttf2.0-dev`
   
   #### Getting started
   - Make a build directory: `mkdir build`
