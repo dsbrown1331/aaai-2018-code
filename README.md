@@ -85,7 +85,7 @@ In the field of reinforcement learning there has been recent progress towards sa
   - Due to some changes in code and random seed the results are slightly different than in the paper. 
   - You should get results similar to the following:
   
-| Eval Policy           | Collisions | WFCB | VaR 95 | 
+| Eval Policy           | Collisions | WFCB bound | VaR 95 bound | 
 | -------------------  |:-----: |:-----:   | :----:|
 |right_safe | 0 |  5.87 | 1.08|
 |on_road | 13.65 | 1.81 | 1.14|
