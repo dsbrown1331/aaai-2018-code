@@ -92,6 +92,19 @@ In the field of reinforcement learning there has been recent progress towards sa
 |nasty | 42.75 |  4.39 | 2.60|
 
    - To calculate the average number of collisions use `make driving_ccounts`, then run `./driving_ccounts [POLICY]` where `[POLICY]` can be `right_safe`, `on_road`, or `nasty`. You should get the results shown in the table above.
+   
+   - Gifs of the different policies are shown below
+   
+   <figure>
+       <div>
+       <img src="gifs/demo_safe_driving.gif" width="250">
+       <img src="gifs/right_driving.gif" width="250">
+       <img src="gifs/onroad_driving.gif" width="250">
+       <img src="gifs/nasty_driving.gif" width="250">
+     </div>
+       <figcaption>Demonstration, right-safe, on-road, and nasty policies</figcaption>
+
+   </div>
 
   
   #### Policy Improvement (Figure 4 in [AAAI 2018 paper](https://arxiv.org/abs/1707.00724))
