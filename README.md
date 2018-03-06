@@ -87,8 +87,8 @@ In the field of reinforcement learning there has been recent progress towards sa
   
 | Eval Policy           | Collisions | WFCB bound | VaR 95 bound | 
 | -------------------  |:-----: |:-----:   | :----:|
-|right_safe | 0 |  5.87 | 1.08|
-|on_road | 13.65 | 1.81 | 1.14|
+|right-safe | 0 |  5.87 | 1.08|
+|on-road | 13.65 | 1.81 | 1.14|
 |nasty | 42.75 |  4.39 | 2.60|
 
    - To calculate the average number of collisions use `make driving_ccounts`, then run `./driving_ccounts [POLICY]` where `[POLICY]` can be `right_safe`, `on_road`, or `nasty`. You should get the results shown in the table above.
