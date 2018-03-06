@@ -97,14 +97,13 @@ In the field of reinforcement learning there has been recent progress towards sa
    
    <figure>
        <div>
-       <img src="gifs/demo_safe_driving.gif" width="250">
-       <img src="gifs/right_driving.gif" width="250">
-       <img src="gifs/onroad_driving.gif" width="250">
-       <img src="gifs/nasty_driving.gif" width="250">
-     </div>
-       <figcaption>Demonstration, right-safe, on-road, and nasty policies</figcaption>
-
-   </div>
+       <img src="gifs/demo_safe_driving.gif" width="300">
+       <img src="gifs/right_driving.gif" width="300">
+       <img src="gifs/onroad_driving.gif" width="300">
+       <img src="gifs/nasty_driving.gif" width="300">
+     </div> <br>
+     <figcaption>From left to right and top to bottom: demonstration, right-safe, on-road, and nasty policies</figcaption>
+   </figure>
 
   
   #### Policy Improvement (Figure 4 in [AAAI 2018 paper](https://arxiv.org/abs/1707.00724))
