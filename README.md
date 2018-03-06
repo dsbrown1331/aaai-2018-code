@@ -85,13 +85,13 @@ In the field of reinforcement learning there has been recent progress towards sa
   - Due to some changes in code and random seed the results are slightly different than in the paper. 
   - You should get results similar to the following:
   
-| Eval Policy           | WFCB | VaR 95 | 
-| ------------------- |:-----:   | :----:|
-|right_safe | 5.87 | 1.08|
-|on_road | 1.81 | 1.14|
-|nasty | 4.39 | 2.60|
+| Eval Policy           | Collisions | WFCB | VaR 95 | 
+| -------------------  |:-----: |:-----:   | :----:|
+|right_safe | 0 |  5.87 | 1.08|
+|on_road | 13.65 | 1.81 | 1.14|
+|nasty | 42.75 |  4.39 | 2.60|
 
-   - To calculate the average number of collisions use `make driving_ccounts`, then run `./driving_ccounts [policy]` where policy can be `right_safe`, `on_road`, or `nasty`. 
+   - To calculate the average number of collisions use `make driving_ccounts`, then run `./driving_ccounts [POLICY]` where `[POLICY]` can be `right_safe`, `on_road`, or `nasty`. You should get the results shown in the table above.
 
   
   #### Policy Improvement (Figure 4 in [AAAI 2018 paper](https://arxiv.org/abs/1707.00724))
