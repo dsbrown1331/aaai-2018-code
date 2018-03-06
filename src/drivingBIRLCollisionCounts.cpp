@@ -7,61 +7,96 @@
 #include <algorithm>
 #include <fstream>
 
-//This experiment is to try and show that worst-case feature counts do silly things 
+double evalFeatureWeights[6];
+string evalPolicyName;
 
-//this is for a naive eval policy
+//script to test out q-learner in BIRL
+int main(int argc, char* argv[])
+{
 
-//it uses an evaluation policy defined by evalFeatureWeights
-//double evalFeatureWeights[] = {0,  //collision
-//                                 0,  //tailgate
-//                               -0.5,  //offroad left
-//                                 0,  //road left lane
-//                                  0,  //road center lane
-//                                 0,  //road right lane
-//                               -0.5}; //offroad right
-//                            // 0.0, //car to left of me  //TODO makes things weird!
-//                            // 0.0};//car to right of me
+    // Check the number of parameters
+    if (argc != 2) {
+        // Tell the user how to run the program
+        std::cerr << "Usage: " << argv[0] << "eval_policy" << std::endl;
+        std::cerr << "eval policy can be one of the following: \n"
+                        "\t\t\t on_road \n"
+                        "\t\t\t right_safe \n"
+                        "\t\t\t nasty" << endl;
 
-//string evalPolicyName = "stay_on_road";
+        /* "Usage messages" are a conventional way of telling the user
+         * how to run a program if they enter the command incorrectly.
+         */
+        return 1;
+    }
+    else
+    {
+        if(strcmp( argv[1],"on_road") == 0)
+        {
+            double weights[] = {0,  //collision
+                               -0.5,  //offroad left
+                                 0,  //road left lane
+                                  0,  //road center lane
+                                 0,  //road right lane
+                               -0.5}; //offroad right
+                          
+            copy(begin(weights), end(weights), begin(evalFeatureWeights));
+            evalPolicyName = "on_road";
+        }
+        else if(strcmp( argv[1], "right_safe") == 0)
+        {
 
 
-//double evalFeatureWeights[] = {-1,  //collision
-//                                 -1,  //tailgate
-//                               -1,  //offroad left
-//                                 0,  //road left lane
-//                                  0.1,  //road center lane
-//                                 0.5,  //road right lane
-//                               -1}; //offroad right
-//                            // 0.0, //car to left of me  //TODO makes things weird!
-//                            // 0.0};//car to right of me
-//string evalPolicyName = "right_lane";
+            double weights[] = {-1,  //collision
+                               -1,  //offroad left
+                                 0,  //road left lane
+                                  0.1,  //road center lane
+                                 0.5,  //road right lane
+                               -1}; //offroad right
+            copy(begin(weights), end(weights), begin(evalFeatureWeights));
+            evalPolicyName = "right_safe";
+        }
+        else if(strcmp( argv[1], "nasty") == 0)
+        {
 
 
-double evalFeatureWeights[] = {1,  //collision
-                                 1,  //tailgate
+            double weights[] = {1,  //collision
                                -1,  //offroad left
                                  0,  //road left lane
                                   0,  //road center lane
                                  0,  //road right lane
-                               -1}; //offroad right
-                            // 0.0, //car to left of me  //TODO makes things weird!
-                            // 0.0};//car to right of me
-string evalPolicyName = "nasty";
+                               -1}; //offroad right                      
+            copy(begin(weights), end(weights), begin(evalFeatureWeights));
+            evalPolicyName = "nasty";
+        }
+        else if(strcmp( argv[1], "expert")==0)
+        {
 
-//double evalFeatureWeights[] = {-0.4,  //collision
-//                                 -0.2,  //tailgate
-//                               -0.2,  //offroad left
-//                                 0,  //road left lane
-//                                  0,  //road center lane
-//                                 0,  //road right lane
-//                               -0.2}; //offroad right
-//                            // 0.0, //car to left of me  //TODO makes things weird!
-//                            // 0.0};//car to right of me
-//string evalPolicyName = "expert";
+            double weights[] = {-0.4,  //collision
+                                   -0.2,  //offroad left
+                                     0,  //road left lane
+                                      0,  //road center lane
+                                     0,  //road right lane
+                                   -0.2}; //offroad right     
+            copy(begin(weights), end(weights), begin(evalFeatureWeights));              
+            evalPolicyName = "expert";
+        }
+        else
+        {
+            std::cerr << "Usage: " << argv[0] << "eval_policy" << std::endl;
+            std::cerr << "eval policy can be one of the following: \n"
+                            "\t\t\t on_road \n"
+                            "\t\t\t right_safe \n"
+                            "\t\t\t nasty"<< endl;
 
-//script to test out q-learner in BIRL
-int main()
-{
+            /* "Usage messages" are a conventional way of telling the user
+             * how to run a program if they enter the command incorrectly.
+             */
+            return 1;
+        }
+        
+    
+    
+    }
     bool debug = false;
     int mc_rolloutLength = 100;
     int mc_numRollouts = 200;
@@ -71,7 +106,7 @@ int main()
     //create world
     bool visualize = false;
     int numStateFeatures = 12;
-    int numRewardFeatures = 7;
+    int numRewardFeatures = 6;
     bool twoCars = false;
     double exploreRate = 0.8; //without a goal, I think qlearning with epsilon should be close to 1 so we see lots of states and take all possible actions many times
     double learningRate = 0.1;
@@ -81,7 +116,7 @@ int main()
     int demo_length = 100;
     double min_reward = -2;
     double max_reward = 2;
-    unsigned int chain_len = 2000; ///TODO change back!
+    unsigned int chain_len = 2000; 
     double mcmc_step = 0.01;
     double alpha_conf = 5;
     int sample_flag = 4;

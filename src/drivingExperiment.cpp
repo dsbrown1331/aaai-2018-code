@@ -27,8 +27,7 @@ int main(int argc, char* argv[])
         std::cerr << "eval policy can be one of the following: \n"
                         "\t\t\t on_road \n"
                         "\t\t\t right_safe \n"
-                        "\t\t\t nasty \n"
-                        "\t\t\t expert" << endl;
+                        "\t\t\t nasty " << endl;
 
         /* "Usage messages" are a conventional way of telling the user
          * how to run a program if they enter the command incorrectly.
@@ -93,8 +92,7 @@ int main(int argc, char* argv[])
             std::cerr << "eval policy can be one of the following: \n"
                             "\t\t\t on_road \n"
                             "\t\t\t right_safe \n"
-                            "\t\t\t nasty \n"
-                            "\t\t\t expert" << endl;
+                            "\t\t\t nasty"   << endl;
 
             /* "Usage messages" are a conventional way of telling the user
              * how to run a program if they enter the command incorrectly.
@@ -136,7 +134,7 @@ int main(int argc, char* argv[])
     int num_proposal_steps = 10; //doesn't matter for manifold all walk
 
 
-
+    //simulated expert feature weights
     double featureWeights[] = {-0.4,  //collision
                                -0.2,  //offroad left
                                  0,  //road left lane

@@ -25,6 +25,12 @@ demo_sufficiency_exp: build/demoSufficiencyExample.o
 driving_experiment: build/drivingExperiment.o
 	$(CC) $(LFLAGS) build/drivingExperiment.o  -I /usr/include/SDL -lSDL -lSDL_image -lpthread -lSDL_ttf -o driving_experiment	
 	
+driving_ccounts: build/drivingBIRLCollisionCounts.o
+	$(CC) $(LFLAGS) build/drivingBIRLCollisionCounts.o  -I /usr/include/SDL -lSDL -lSDL_image -lpthread -lSDL_ttf -o driving_ccounts	
+	
+driving_test: build/drivingTester.o
+	$(CC) $(LFLAGS) build/drivingTester.o -o driving_test -I /usr/include/SDL -lSDL -lSDL_image -lpthread -lSDL_ttf
+	
 build/gridWorldBasicExperiment.o: src/gridWorldBasicExperiment.cpp include/mdp.hpp include/confidence_bounds.hpp include/feature_birl.hpp include/grid_domains.hpp include/unit_norm_sampling.hpp
 	$(CC) $(CFLAGS) src/gridWorldBasicExperiment.cpp -o build/gridWorldBasicExperiment.o
 
@@ -42,6 +48,12 @@ build/demoSufficiencyExample.o: src/demoSufficiencyExample.cpp include/mdp.hpp i
 	
 build/drivingExperiment.o: src/drivingExperiment.cpp include/q_learner_driving.hpp include/driving_world.hpp include/feature_birl_qlearning.hpp include/unit_norm_sampling.hpp include/confidence_bounds_qlearning.hpp
 	$(CC) $(CFLAGS) src/drivingExperiment.cpp -o build/drivingExperiment.o 
+	
+build/drivingBIRLCollisionCounts.o: src/drivingBIRLCollisionCounts.cpp include/q_learner_driving.hpp include/driving_world.hpp include/feature_birl_qlearning.hpp include/unit_norm_sampling.hpp include/confidence_bounds_qlearning.hpp
+	$(CC) $(CFLAGS) src/drivingBIRLCollisionCounts.cpp -o build/drivingBIRLCollisionCounts.o 	
+
+build/drivingTester.o: src/drivingTester.cpp include/q_learner_driving.hpp include/driving_world.hpp 
+	$(CC) $(CFLAGS) src/drivingTester.cpp -o build/drivingTester.o 
 
 feature: feature_test mdp_test feature_birl_test
 
@@ -75,8 +87,6 @@ grid_l1_experiment: build/gridNavExperimentRunnerL1walk.o
 fcount_example: build/gridNavFeatureCntExampleL1walk.o
 	$(CC) $(LFLAGS) build/gridNavFeatureCntExampleL1walk.o -o fcount_example
 	
-driving_example: build/drivingTester.o
-	$(CC) $(LFLAGS) build/drivingTester.o -o driving_example -I /usr/include/SDL -lSDL -lSDL_image -lpthread -lSDL_ttf
 
 driving_birl_example: build/drivingBIRLTester.o
 	$(CC) $(LFLAGS) build/drivingBIRLTester.o  -I /usr/include/SDL -lSDL -lSDL_image -lpthread -lSDL_ttf -o driving_birl_example
@@ -96,9 +106,6 @@ driving_experiment2: build/drivingBIRLExperiment2.o
 
 driving_experiment3: build/drivingBIRLExperiment3.o
 	$(CC) $(LFLAGS) build/drivingBIRLExperiment3.o  -I /usr/include/SDL -lSDL -lSDL_image -lpthread -lSDL_ttf -o driving_experiment3	
-
-driving_ccounts: build/drivingBIRLCollisionCounts.o
-	$(CC) $(LFLAGS) build/drivingBIRLCollisionCounts.o  -I /usr/include/SDL -lSDL -lSDL_image -lpthread -lSDL_ttf -o driving_ccounts	
 
 
 experiment1: build/gridWorldExperiment1.o
@@ -199,8 +206,7 @@ build/drivingBIRLExperiment2.o: src/drivingBIRLExperiment2.cpp include/q_learner
 build/drivingBIRLExperiment3.o: src/drivingBIRLExperiment3.cpp include/q_learner_driving.hpp include/driving_world.hpp include/feature_birl_qlearning.hpp include/unit_norm_sampling.hpp include/confidence_bounds_qlearning.hpp
 	$(CC) $(CFLAGS) src/drivingBIRLExperiment3.cpp -o build/drivingBIRLExperiment3.o 
 
-build/drivingBIRLCollisionCounts.o: src/drivingBIRLCollisionCounts.cpp include/q_learner_driving.hpp include/driving_world.hpp include/feature_birl_qlearning.hpp include/unit_norm_sampling.hpp include/confidence_bounds_qlearning.hpp
-	$(CC) $(CFLAGS) src/drivingBIRLCollisionCounts.cpp -o build/drivingBIRLCollisionCounts.o 	
+
 
 build/birl_test: $(OBJS)
 	$(CC) $(LFLAGS) $(OBJS) -o birl_test

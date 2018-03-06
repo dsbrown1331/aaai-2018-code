@@ -1,4 +1,3 @@
-
 #ifndef driving_world_h
 #define driving_world_h
 
@@ -26,20 +25,17 @@ enum ACTION { LEFT, STAY, RIGHT };
         //TODO make this configurable
         //const int NUM_OTHER_CARS = 1;
         
-        const int DEMO_LENGTH = 100;
-        
         const int NUM_LANES = 5;
         const int NUM_ACTIONS = 3;
 
         const int SCREEN_WIDTH = 800;
-        const int SCREEN_HEIGHT = 500;  //6 car widths
-        //const int SCREEN_HEIGHT = 300;  //6 car widths
+        const int SCREEN_HEIGHT = 300;  //6 car widths
         const int SCREEN_BPP = 32;
         const int LANE_WIDTH = SCREEN_WIDTH / 8;
         //The attributes of the car
         const int CAR_WIDTH = 30;
         const int CAR_HEIGHT = 60;
-        const double CAR_SPEED = 1.0; // 1 car heights per step
+        const double CAR_SPEED = 1.0; // 1/2 car heights per step
 
 
 
@@ -301,10 +297,9 @@ class DrivingWorld
            //reward?
         float score = 0;
         bool two_cars;
-        bool human_demo;
 
         //constructor
-        DrivingWorld(bool vizOn, double* fWeights, int nStateFeatures, int nRewardFeatures, bool twoCars=false, bool humanDemo=false): visualize(vizOn), numStateFeatures(nStateFeatures), numRewardFeatures(nRewardFeatures), two_cars(twoCars), human_demo(humanDemo)
+        DrivingWorld(bool vizOn, double* fWeights, int nStateFeatures, int nRewardFeatures, bool twoCars=false): visualize(vizOn), numStateFeatures(nStateFeatures), numRewardFeatures(nRewardFeatures), two_cars(twoCars)
         {
             //copy feature weights
             featureWeights = new double[nRewardFeatures];
@@ -371,7 +366,7 @@ class DrivingWorld
 
 
         //Takes key presses and adjusts the car's velocity
-        int handle_input();
+        void handle_input();
 
         //Moves the car
         void move();
@@ -388,7 +383,6 @@ class DrivingWorld
         bool check_collision( SDL_Rect A, SDL_Rect B );
         void apply_surface( int x, int y, SDL_Surface* source, SDL_Surface* destination, SDL_Rect* clip = NULL );
         int getNumActions(){ return NUM_ACTIONS; };
-        vector<pair<string,unsigned int> > startHumanDemo();
             
 
 };
@@ -408,16 +402,13 @@ void DrivingWorld::initializeCarPositions()
   //Initialize the offsets
   //agent car starts in lane 2
   box.x = 2*LANE_WIDTH + LANE_WIDTH/2 - CAR_WIDTH/2;
-  //box.y = 4 * CAR_HEIGHT;
-  box.y = 6 * CAR_HEIGHT;
+  box.y = 4 * CAR_HEIGHT;
 
   //start in lane 1
   bad_car_box.x = 1*LANE_WIDTH + LANE_WIDTH/2 - CAR_WIDTH/2;
   bad_car_box.y = 4*CAR_HEIGHT;
-  ////start in lane 2
-  //bad_car_box2.x = 2*LANE_WIDTH + LANE_WIDTH/2 - CAR_WIDTH/2;
-  //start in lane 3
-  bad_car_box2.x = 3*LANE_WIDTH + LANE_WIDTH/2 - CAR_WIDTH/2;
+  //start in lane 2
+  bad_car_box2.x = 2*LANE_WIDTH + LANE_WIDTH/2 - CAR_WIDTH/2;
   bad_car_box2.y = 0;
 
   //Set the car's dimentions
@@ -615,107 +606,6 @@ void DrivingWorld::show()
 
 
 
-//reset game and return starting state
-vector<pair<string,unsigned int> > DrivingWorld::startHumanDemo()
-{
-
-    //TODO store human demo in this vector
-    vector<pair<string,unsigned int> > demonstration;
-
-    //reset score
-    score = 0;
-    
-    
-      //Quit flag
-  bool quit = false;
-
-    //initialize viz and state code
-//always visualize human demo    
-//    if(visualize)
-//    {
-      //Initialize
-      if( init() == false )
-      {
-        cout << "can't init" << endl;
-      }
-
-      //Load the files
-      if( load_files() == false )
-      {
-        cout << "can't load files" << endl;
-      }
-
-      //Set the message
-      message = TTF_RenderText_Solid( font, "Score: 0", textColor );
-   // }
-    initializeCarPositions();
-    initializeRoadPositions();
-    
-  //  int lane = getCurrentLaneNumber(0);
-  //  cout << "Starting lane: " << lane << endl;
-
-  
-  int steps = 0;
-  //While the user hasn't quit
-  while( quit == false && steps < DEMO_LENGTH)
-  {
-    
-    cout << "STEPS: "<<  steps << endl;
-    steps++;
-    State curState = getCurrentState();
-    int action = 1;
-  
-    //While there's events to handle
-    while( SDL_PollEvent( &event ) )
-    {
-      //Handle events for the car
-      action = handle_input();
-
-      //If the user has Xed out the window
-      SDL_PollEvent( &event );
-      if( event.type == SDL_QUIT )
-      {
-        //Quit the program
-        quit = true;
-      }
-    }
-
-    //update demo with state-action pair    
-    demonstration.push_back(make_pair(curState.toStateString(), action));
-
-    //make a move to update simulator
-    
-    switch(action)
-    {
-        case LEFT: 
-            xVel = -1.0;
-            break;
-        case STAY:
-            xVel = 0.0;
-            break;
-        case RIGHT:
-            xVel = +1.0;
-            break;
-    }
-
-    //Move the car
-    move();
-    
-    
-
-    //if(visualize)
-    //{
-        updateFrame();   
-        //Update the screen
-        if( SDL_Flip( screen ) == -1 )
-        {
-          cout << "can't update screen" << endl;
-        }   
-        usleep(100000);
-    //}
-    }
-    return demonstration;
-}
 
 
 //reset game and return starting state
@@ -824,23 +714,6 @@ pair<State, double> DrivingWorld::updateState(unsigned int action)
 
 }
 
-
-int DrivingWorld::handle_input()
-{
-  int action = 1;
-  //If a key was released
-  if( event.type == SDL_KEYDOWN )
-  {
-    //Adjust the velocity
-    switch( event.key.keysym.sym )
-    {
-      case SDLK_LEFT: action = 0; break;
-      case SDLK_RIGHT: action = 2; break;
-      default: break;
-    }
-  }
-  return action;
-}
 
 void DrivingWorld::updateFrame()
 {
@@ -1067,5 +940,4 @@ void DrivingWorld::initializeRoadPositions()
 
 
 #endif
-
 

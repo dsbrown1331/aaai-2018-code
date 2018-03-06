@@ -14,30 +14,31 @@ int main()
     bool visualize = false;
     int numStateFeatures = 12;
     int numRewardFeatures = 6;
-    bool twoCars = true;
-    double exploreRate = 1.0; //without a goal, I think qlearning with epsilon should be close to 1 so we see lots of states and take all possible actions many times
-    double learningRate = 0.2;
+    bool twoCars = false;  //can set to true to have two cars
+    double exploreRate = 0.8; //without a goal, I think qlearning with epsilon should be close to 1 so we see lots of states and take all possible actions many times
+    double learningRate = 0.1;
     int numActions = 3;
     double gamma = 0.9;
-    int numSteps = 60000;     
-double featureWeights[] = {-0.0766667,	-0.216667,	0.03,	0.396667,	0.116667,	-0.163333};
-//    double featureWeights[] = {1,  //collision
-//                                 -1,  //tailgate
-//                               -1,  //offroad left
-//                                 0,  //road left lane
-//                                  0,  //road center lane
-//                                 0,  //road right lane
-//                               -1}; //offroad right
-//                            // 0.0, //car to left of me  //TODO makes things weird!
-//                            // 0.0};//car to right of me
+    int numSteps = 10000;    
+    
+    //////////////////////////////
+    ///Feature Weights defining reward function to optimize 
+    //////////////////////////////
+    double featureWeights[] = {-1,  //collision
+                               -1,  //offroad left
+                                 0,  //road left lane
+                                  0,  //road center lane
+                                 0,  //road right lane
+                               -1}; //offroad right
+    //////////////////////////////
 
     DrivingWorld world(visualize, featureWeights, numStateFeatures, numRewardFeatures, twoCars);
-    //give world to Q-learner
+    //learn policy using Q-learning
     TabularQLearner qbot(&world, numActions, gamma);
     qbot.trainEpoch(numSteps, exploreRate, learningRate);
     cout << "done training" << endl;
     //test out learned policy
-    world.setVisuals(true);
+    world.setVisuals(true); //show the car driving 
     State initState = world.startNewEpoch();
     State state = initState;
     cout << "init state: " << initState.toStateString() << endl;
