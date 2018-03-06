@@ -112,5 +112,11 @@ In the field of reinforcement learning there has been recent progress towards sa
    - Note that given a non-zero safety threshold on Value-at-Risk, say &epsilon; = 0.01, the agent would be able to report that it had learned the given task after two demonstrations, whereas using only feature counts makes it seem like three demonstrations are needed.
    
    
+   #### Miscellaneous
+   - To experiment with the Car Simulator you can run Q-learning on a desired reward function using `/src/drivingTester.cpp`.
+   - Simply compile using `make driving_test`, and run as `./driving_test` and you will see a simulation of the car driving using the learned policy.
+   - To try other rewards, simply edit `double featureWeights[]` in `/src/drivingTester.cpp`.
+   
+   
   
 
