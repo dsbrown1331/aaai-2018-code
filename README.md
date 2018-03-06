@@ -82,14 +82,14 @@ In the field of reinforcement learning there has been recent progress towards sa
   - Use `make driving_experiment` to build experiment.
   - Execute `./driving_experiment right_safe`, `./driving_experiment on_road`, and `./driving_experiment nasty` to run experiments and output results to `./data/driving/`.
   - Once all experiments have finished run `python scripts/calculateDrivingRankings.py` to output results.
-  - Due to some changes in code and random seed the results are slightly different than in the paper. 
   - You should get results similar to the following:
   
 | Eval Policy           | Collisions | WFCB bound | VaR 95 bound | 
 | -------------------  |:-----: |:-----:   | :----:|
-|right-safe | 0 |  5.87 | 1.08|
-|on-road | 13.65 | 1.81 | 1.14|
-|nasty | 42.75 |  4.39 | 2.60|
+|right-safe | 0 |  5.52 | 0.85|
+|on-road | 13.65 | 1.93 | 1.09|
+|nasty | 42.75 |  4.11 | 2.44|
+
 
    - To calculate the average number of collisions use `make driving_ccounts`, then run `./driving_ccounts [POLICY]` where `[POLICY]` can be `right_safe`, `on_road`, or `nasty`. You should get the results shown in the table above.
    
