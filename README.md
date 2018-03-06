@@ -10,12 +10,20 @@ In the field of reinforcement learning there has been recent progress towards sa
 ## Citations
 
 ```
-@article{brown2018probabilistic,
+@inproceedings{brown2018probabilistic,
      author = {Brown, Daniel S. and Niekum, Scott},
-     title = "{Efficient Probabilistic Performance Bounds for Inverse Reinforcement Learning}",
-     journal = {AAAI Conference on Artificial Intelligence},
+     title = {Efficient Probabilistic Performance Bounds for Inverse Reinforcement Learning},
+     booktitle = {AAAI Conference on Artificial Intelligence},
      year = 2018,
      url={https://arxiv.org/abs/1707.00724}
+}
+
+@inproceedings{brown2017toward,
+     author = {Brown, Daniel S. and Niekum, Scott},
+     title = {Toward Probabilistic Safety Bounds for Robot Learning from Demonstration},
+     booktitle = {AAAI Fall Symposium: Artificial Intelligence for Human-Robot Interaction},
+     year = 2017,
+     url={https://aaai.org/ocs/index.php/FSS/FSS17/paper/view/16023/15282}
 }
 ```
  
@@ -70,7 +78,18 @@ In the field of reinforcement learning there has been recent progress towards sa
   
   
   #### Policy Selection for Driving Domain
-  - UNDER CONSTRUCTION
+  - Use `make driving_experiment` to build experiment.
+  - Execute `./driving_experiment right_safe`, `./driving_experiment on_road`, and `./driving_experiment nasty` to run experiments and output results to `./data/driving/`.
+  - Once all experiments have finished run `python scripts/calculateDrivingRankings.py` to output results.
+  - Due to some changes in code and random seed the results are slightly different than in the paper. 
+  - You should get results similar to the following:
+  
+| Eval Policy           | WFCB | VaR 95 | 
+| ------------------- |:-----:   | :----:|
+|right_safe | 5.87 | 1.08|
+|on_road | 1.81 | 1.14|
+|nasty | 4.39 | 2.60|
+
   
   #### Policy Improvement (Figure 4 in [AAAI 2018 paper](https://arxiv.org/abs/1707.00724))
   - Use `make improvement_exp` to build the experiment.
