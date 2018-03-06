@@ -91,6 +91,8 @@ In the field of reinforcement learning there has been recent progress towards sa
 |on_road | 1.81 | 1.14|
 |nasty | 4.39 | 2.60|
 
+   - To calculate the average number of collisions use `make driving_ccounts`, then run `./driving_ccounts [policy]` where policy can be `right_safe`, `on_road`, or `nasty`. 
+
   
   #### Policy Improvement (Figure 4 in [AAAI 2018 paper](https://arxiv.org/abs/1707.00724))
   - Use `make improvement_exp` to build the experiment.
